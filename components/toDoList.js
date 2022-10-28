@@ -106,6 +106,10 @@ export default function ToDoList() {
     const [name, setName] = useState("");
     const [jobs, setJobs] = useState([]);
     const [outputs, setOutputs] = useState();
+    const [inputs, setInputs] = useState({
+        name: "",
+        id: "",
+    });
 
     const getDataMock = async () => {
         try {
@@ -120,6 +124,7 @@ export default function ToDoList() {
             // setLoading(false);
         }
     };
+
     useEffect(() => {
         getDataMock();
     }, []);
@@ -134,21 +139,33 @@ export default function ToDoList() {
             ></FlatListIteam>
         );
     };
-    const data = [
-        {
-            id: 1,
-            title: "test",
-        },
-        {
-            id: 2,
-            title: "test",
-        },
-    ];
 
     // console.log(jobs);
-    const handleClick = () => {
-        setJobs((prev) => [...prev, job]);
-        console.log(job);
+    const handleChange = (e) => {
+        setInputs((prev) => [...prev, job]);
+    };
+    console.log(inputs);
+
+    const addDataApi = async (data) => {
+        try {
+            await fetch(
+                "https://6348d9a30b382d796c7881ef.mockapi.io/comments",
+                {
+                    method: "POST", // or 'PUT'
+                    data: inputs,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+                .then(async (response) => await response.json())
+                .then((todos) => {
+                    getDataMock();
+                    // setData(todos);
+                });
+        } catch (error) {
+            console.log("Error:", error);
+        }
     };
 
     return (
@@ -168,15 +185,19 @@ export default function ToDoList() {
 
                 <TextInput
                     style={{ borderWidth: 1, height: 40, width: "20%" }}
+                    name="id"
                     //   value={job}
-                    onChangeText={(e) => setJob(e)}
+                    onChangeText={(text) => setInputs({ ...inputs, id: text })}
                 ></TextInput>
                 <TextInput
                     style={{ borderWidth: 1, height: 40, width: "20%" }}
                     //   value={job}
-                    onChangeText={(e) => setJob(e)}
+                    name="name"
+                    onChangeText={(text) =>
+                        setInputs({ ...inputs, name: text })
+                    }
                 ></TextInput>
-                <TouchableOpacity onPress={handleClick}>
+                <TouchableOpacity onPress={addDataApi}>
                     <Image
                         style={{ height: 40, width: 40 }}
                         source={require("../assets/add.png")}
