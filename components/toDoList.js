@@ -16,7 +16,7 @@ import connect1 from "../api/connect1";
 import { useEffect } from "react";
 // import Swipeout from "react-native-swipeout";
 
-const FlatListIteam = ({ item, index, data }) => {
+const FlatListIteam = ({ item, index, data, setData }) => {
     const handleRemove = (item) => {
         // console.log(item);
     };
@@ -71,6 +71,7 @@ const FlatListIteam = ({ item, index, data }) => {
                             }}
                             onPress={() => {
                                 console.log(item.id);
+                                7;
                                 fetch(
                                     "https://6348d9a30b382d796c7881ef.mockapi.io/comments" +
                                         item.id,
@@ -83,8 +84,8 @@ const FlatListIteam = ({ item, index, data }) => {
                                 )
                                     .then(() => item)
                                     .then((item) => {
-                                        data = data.filter(
-                                            (ite) => ite !== item
+                                        setData(
+                                            data.filter((ite) => ite !== item)
                                         );
                                         // console.log(list);
                                     });
@@ -129,12 +130,7 @@ export default function ToDoList() {
                 data={outputs}
                 item={item}
                 index={index}
-                handleRemove={() => {
-                    // setRefresh(!refresh);
-                    // console.log("alo");
-                    // console.log(item);
-                    // outputs.splice(outputs.indexOf(item), 1);
-                }}
+                setData={setOutputs}
             ></FlatListIteam>
         );
     };
